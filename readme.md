@@ -27,3 +27,34 @@ model_dict = import_objects(
 globals().update(model_dict)
 
 ```
+
+
+# 配置数据库
+lms_backend/DB_config.py
+```python
+# ================================================= #
+# *************** SSH 连接Msql配置 *************** #
+# ================================================= #
+# 数据库服务器的ip地址或主机名
+ssh_host = ""
+# 数据库服务器的SSH连接端口号，一般都是22，必须是数字
+ssh_port = 22
+# 数据库服务起的用户名
+ssh_user = ""
+# 数据库服务器的用户名密码
+# ssh_password = "123456"
+ssh_pkey = ""
+
+# 数据库服务起的mysql的主机名或ip地址
+mysql_host = '127.0.0.1'
+# 数据库服务起的mysql的端口，默认3306
+mysql_port = 3306
+# 数据库mysql的用户名
+mysql_user = ""
+# 数据库mysql密码
+mysql_password = ""
+# 数据库的库名
+mysql_db = ""
+
+
+```
