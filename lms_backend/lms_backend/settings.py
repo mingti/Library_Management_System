@@ -71,10 +71,45 @@ WSGI_APPLICATION = 'lms_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+from sshtunnel import open_tunnel
+import DB_config
+
+
+def get_db_port_with_ssh(ssh_host, ssh_port, ssh_user, ssh_pkey, mysql_host, mysql_port):
+    """
+    建立ssh连接 返回转发端口.
+    :return:
+    """
+    server = open_tunnel(
+        (ssh_host, ssh_port),
+        ssh_username=ssh_user,
+        ssh_pkey=ssh_pkey,
+        # 绑定服务起的Mysql数据库
+        remote_bind_address=(mysql_host, mysql_port)
+    )
+    # ssh通道服务启动
+    server.start()
+    return str(server.local_bind_port)
+
+
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': DB_config.mysql_db,
+        'USER': DB_config.mysql_user,
+        'PASSWORD': DB_config.mysql_password,
+        'HOST': DB_config.mysql_host,
+        'PORT': get_db_port_with_ssh(DB_config.ssh_host,
+                                     DB_config.ssh_port,
+                                     DB_config.ssh_user,
+                                     DB_config.ssh_pkey,
+                                     DB_config.mysql_host,
+                                     DB_config.mysql_port
+                                     )
     }
 }
 
