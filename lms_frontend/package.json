@@ -9,10 +9,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.5.13"
+    "@element-plus/icons-vue": "^2.3.1",
+    "@types/node": "^22.14.1",
+    "@vueuse/core": "^13.1.0",
+    "element-plus": "^2.9.8",
+    "path": "^0.12.7",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.2.2",
-    "vite": "^6.3.1"
+    "@iconify/vue": "^4.3.0",
+    "@vitejs/plugin-vue": "^5.2.3",
+    "vite": "^6.3.2"
   }
 }

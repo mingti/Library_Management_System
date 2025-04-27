@@ -58,3 +58,7 @@ mysql_db = ""
 
 
 ```
+# 解决 vite.condif.js 中 path 不能识别的问题
+```bash
+  npm install @types/node
+```
