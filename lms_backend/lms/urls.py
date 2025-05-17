@@ -9,7 +9,6 @@ routers = routers.DefaultRouter()
 routers.register('books', BookViewSet)
 
 urlpatterns = [
-
     path("", include(routers.urls)),
 
 ]
