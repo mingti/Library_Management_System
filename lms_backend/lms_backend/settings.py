@@ -35,6 +35,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'rest_framework',
+    # 'rest_framework.authtoken',
+    'knox',
+    'djoser',
     'account.apps.AccountConfig',
     'lms.apps.LmsConfig'
 ]
@@ -73,7 +77,7 @@ WSGI_APPLICATION = 'lms_backend.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 from sshtunnel import open_tunnel
-import DB_config
+import project_config
 
 
 def get_db_port_with_ssh(ssh_host, ssh_port, ssh_user, ssh_pkey, mysql_host, mysql_port):
@@ -100,16 +104,16 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': DB_config.mysql_db,
-        'USER': DB_config.mysql_user,
-        'PASSWORD': DB_config.mysql_password,
-        'HOST': DB_config.mysql_host,
-        'PORT': get_db_port_with_ssh(DB_config.ssh_host,
-                                     DB_config.ssh_port,
-                                     DB_config.ssh_user,
-                                     DB_config.ssh_pkey,
-                                     DB_config.mysql_host,
-                                     DB_config.mysql_port
+        'NAME': project_config.mysql_db,
+        'USER': project_config.mysql_user,
+        'PASSWORD': project_config.mysql_password,
+        'HOST': project_config.mysql_host,
+        'PORT': get_db_port_with_ssh(project_config.ssh_host,
+                                     project_config.ssh_port,
+                                     project_config.ssh_user,
+                                     project_config.ssh_pkey,
+                                     project_config.mysql_host,
+                                     project_config.mysql_port
                                      )
     }
 }
@@ -152,3 +156,29 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",  # 定义不带T的格式[[6]]
+
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
+        'knox.auth.TokenAuthentication',  # 用 Knox 替代默认的 Token 认证
+    ]
+
+}
+
+# 配置 Djoser 使用 Knox 的 Token 模型
+DJOSER = {
+    'TOKEN_MODEL': 'knox.models.AuthToken',  # 指定 Djoser 使用 Knox 的 Token
+}
+
+ALLOWED_HOSTS = [
+    '*',
+]
+
